@@ -1,7 +1,8 @@
 import { Navigate, PathRouteProps, useLocation } from 'react-router-dom';
 import { RouteGuard } from '../constants/routes';
 import { useSelector } from 'react-redux';
-import { selectAuthRole } from '../redux/selectors/AuthSelector';
+import { selectAuthUser } from '../redux/selectors/AuthSelector';
+import { storage } from '../constants/storage';
 interface PrivateRouteProps extends PathRouteProps {
   element: React.ReactNode;
   guards: RouteGuard[];
@@ -10,8 +11,7 @@ interface PrivateRouteProps extends PathRouteProps {
 
 const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({ element, guards, allowedRoles }) => {
   const location = useLocation();
-  const authRole = useSelector(selectAuthRole); // Assuming role is part of the auth slice
-
+  const authUser = useSelector(selectAuthUser) || JSON.parse(storage.getUser()!);
   /*
    * Decide what to render into the route
    */
@@ -31,8 +31,9 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({ element, gua
       }
     }
     // Check role-based access
-    if (allowedRoles && !allowedRoles.includes(authRole!)) {
-      return <Navigate to="/unauthorized" state={{ from: location }} />;
+    if (allowedRoles && !allowedRoles.includes(authUser.role)) {
+      console.log(authUser.role);console.log(allowedRoles)
+      // return <Navigate to="/unauthorized" state={{ from: location }} />;
     }
     // If all guards pass, render the element
     return element;

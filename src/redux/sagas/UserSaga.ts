@@ -10,6 +10,7 @@ import { userActions } from '../actions/UserActions';
 import { createUserSuccess, deleteUserSuccess, getUsersSuccess, updateUserSuccess } from '../slices/UserSlice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { selectCurrentUser } from '../selectors/UserSelector';
+import { storage } from '../../constants/storage';
 
 function* getMeSaga() {
   try {
@@ -17,6 +18,7 @@ function* getMeSaga() {
     const response: TGetResponse<TUser> = yield call(userService.getMe);
     // Dispatch login success with the user data
     yield put(loginSuccess(response.data as TUser));
+    yield call(storage.setUser,JSON.stringify(response.data as TUser));
     yield put(setLoading(false));
   } catch (error) {
     yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));

@@ -22,6 +22,7 @@ function* loginSaga(action: AnyAction) {
 
     // Dispatch login success with the user data
     yield put(loginSuccess(response.data.user));
+    yield call(storage.setUser,JSON.stringify(response.data.user));
     yield put(setLoading(false));
     // Navigate to the dashboard after successful login
     window.location.reload();
