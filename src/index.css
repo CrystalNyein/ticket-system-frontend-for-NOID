@@ -5,3 +5,10 @@
 .main-content-container {
   @apply mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8;
 }
+
+.btn-loading {
+  @apply cursor-not-allowed;
+}
+.react-datepicker-wrapper {
+  @apply w-full;
+}
