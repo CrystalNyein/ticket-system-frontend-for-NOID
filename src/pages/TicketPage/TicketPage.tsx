@@ -18,12 +18,12 @@ import { SnackbarType } from "../../constants/common";
 import { setLoading } from "../../redux/slices/CommonSlice";
 import ScanResultModal from "./components/ScanResultModal";
 import { selectCurrentBuyer } from "../../redux/selectors/BuyerSelector";
-// import TicketScannerModal from './components/TicketScannerModal';
 
 const TicketPage = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [importSaleModalOpen, setImportSaleModalOpen] = useState(false);
   const [scanModalOpen, setScanModalOpen] = useState(false);
+  const [currentAction,setCurrentAction]=useState<'scanTicket'|'findTicket'>();
   const dispatch = useDispatch();
   const currentBuyer = useSelector(selectCurrentBuyer);
   useEffect(() => {
@@ -36,6 +36,11 @@ const TicketPage = () => {
     setImportSaleModalOpen(true);
   };
   const handleScanTicket = () => {
+    setCurrentAction('scanTicket');
+    setScanModalOpen(true);
+  };
+  const handleFindTicket = () => {
+    setCurrentAction('findTicket');
     setScanModalOpen(true);
   };
 
@@ -95,6 +100,13 @@ const TicketPage = () => {
           >
             Scan Ticket
           </button>
+          
+          <button
+            onClick={handleFindTicket}
+            className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded"
+          >
+            Get Ticket Details
+          </button>
         </div>
       </div>
       {createModalOpen && (
@@ -117,9 +129,10 @@ const TicketPage = () => {
           onSubmit={handleSaleSubmit}
         />
       )}
-      {scanModalOpen && (
+      {scanModalOpen && currentAction && (
         <TicketScannerModal
           isOpen={scanModalOpen}
+          action={currentAction}
           onClose={() => {
             setScanModalOpen(false);
           }}

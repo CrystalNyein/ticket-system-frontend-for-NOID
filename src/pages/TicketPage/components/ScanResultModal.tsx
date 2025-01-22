@@ -17,16 +17,17 @@ const ScanResultModal: React.FC<ScanResultModalProps> = ({ openScanModal }) => {
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-96 p-6">
         {currentBuyer && (
-          <div className="flex flex-col gap-8">
-            <p>Buyer Name: {currentBuyer.name}</p>
-            <p>Buyer Phone: {currentBuyer.phone}</p>
-            <p>
-              Ticket Code: {currentTicket?.ticketTypeCode}
+          <div className="flex flex-col gap-6 items-center">
+            <h3 className='font-bold text-center text-default-orange'>Ticket Details</h3>
+            <p><span className='font-bold'>Buyer Name: </span>{currentBuyer.name}</p>
+            <p><span className='font-bold'>Buyer Phone: </span>{currentBuyer.phone}</p>
+            <p><span className='font-bold'>
+              Ticket Code: </span>{currentTicket?.ticketTypeCode}
               {currentTicket?.ticketCode}
             </p>
           </div>
         )}
-        <button className="bg-dark-blue text-white hover:bg-opacity-80 px-4 py-2 rounded mx-auto" onClick={handleClose}>
+        <button className="bg-default-orange text-white hover:bg-opacity-80 px-4 py-2 rounded mx-auto w-full mt-6" onClick={handleClose}>
           Scan another code
         </button>
       </div>

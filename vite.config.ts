@@ -9,12 +9,12 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, "key.pem")),
-      cert: fs.readFileSync(path.resolve(__dirname, "cert.pem")),
+      key: fs.readFileSync("./certs/LONE.local-key.pem"),
+      cert: fs.readFileSync("./certs/LONE.local.pem"),
     },
     proxy: {
       "/api": {
-        target: "https://DESKTOP-CAQ0N38.local:8080",
+        target: "https://lone.local:8080",
         changeOrigin: true,
         secure: false, // Accept self-signed certificates
       },
