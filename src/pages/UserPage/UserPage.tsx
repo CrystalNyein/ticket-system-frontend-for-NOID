@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
-import Table from '../../components/Table';
-import { UserTableHeader } from '../../constants/tableHeader';
-import { TUser, TUserCreateUpdateParams } from '../../constants/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../redux/actions/UserActions';
-import { selectCurrentUser, selectUsers } from '../../redux/selectors/UserSelector';
-import UserModal from './components/UserModal';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { setCurrentUser } from '../../redux/slices/UserSlice';
-import ConfirmationModal from '../../components/Modal/ConfirmationModal';
+import { useEffect, useState } from "react";
+import Table from "../../components/Table";
+import { UserTableHeader } from "../../constants/tableHeader";
+import { TUser, TUserCreateUpdateParams } from "../../constants/types";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../../redux/actions/UserActions";
+import {
+  selectCurrentUser,
+  selectUsers,
+} from "../../redux/selectors/UserSelector";
+import UserModal from "./components/UserModal";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { setCurrentUser } from "../../redux/slices/UserSlice";
+import ConfirmationModal from "../../components/Modal/ConfirmationModal";
 
 const UserPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [action, setAction] = useState<'create' | 'update'>('create');
+  const [action, setAction] = useState<"create" | "update">("create");
   const dispatch = useDispatch();
   const users = useSelector(selectUsers);
   const currentUser = useSelector(selectCurrentUser);
@@ -23,12 +26,12 @@ const UserPage = () => {
   }, [dispatch]);
 
   const handleCreateUser = () => {
-    setAction('create');
+    setAction("create");
     dispatch(setCurrentUser(null));
     setIsModalOpen(true);
   };
   const handleUpdateUser = (user: TUser) => {
-    setAction('update');
+    setAction("update");
     dispatch(setCurrentUser(user));
     setIsModalOpen(true);
   };
@@ -45,9 +48,9 @@ const UserPage = () => {
   };
 
   const handleSubmit = (userData: TUserCreateUpdateParams) => {
-    if (action === 'create') {
+    if (action === "create") {
       dispatch(userActions.create(userData));
-    } else if (action === 'update') {
+    } else if (action === "update") {
       dispatch(userActions.update(userData));
     }
     setIsModalOpen(false);
@@ -56,7 +59,10 @@ const UserPage = () => {
     <div className="main-content-container">
       <div className="flex justify-between">
         <p>A list of all the users created.</p>
-        <button onClick={handleCreateUser} className="bg-default-orange cursor-pointer text-white px-3 py-1.5 rounded">
+        <button
+          onClick={handleCreateUser}
+          className="bg-default-orange cursor-pointer text-white px-3 py-1.5 rounded"
+        >
           Add User
         </button>
       </div>
@@ -68,17 +74,34 @@ const UserPage = () => {
           header={UserTableHeader}
           tableRowAction={(user: TUser) => (
             <div className="flex space-x-2">
-              <PencilIcon className="h-6 w-6 cursor-pointer" onClick={() => handleUpdateUser(user)} />
-              <TrashIcon
-                className={`h-6 w-6 cursor-pointer ${user.role === 'admin' ? 'text-gray-400 cursor-not-allowed' : 'text-red-600'}`}
-                onClick={() => handleDeleteUser(user)}
+              <PencilIcon
+                className="h-6 w-6 cursor-pointer"
+                onClick={() => handleUpdateUser(user)}
               />
+              {user.role === "admin" ? (
+                <TrashIcon
+                  className="h-6 w-6 text-gray-400 cursor-not-allowed"
+                  title="You do not have access to delete this user."
+                />
+              ) : (
+                <TrashIcon
+                  className="h-6 w-6 cursor-pointer text-red-600"
+                  onClick={() => handleDeleteUser(user)}
+                />
+              )}
             </div>
           )}
         />
       )}
 
-      {isModalOpen && <UserModal action={action} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmit} />}
+      {isModalOpen && (
+        <UserModal
+          action={action}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleSubmit}
+        />
+      )}
       {isConfirmationModalOpen && (
         <ConfirmationModal
           isOpen={isConfirmationModalOpen}
