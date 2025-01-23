@@ -44,9 +44,13 @@ const DashboardPage = () => {
         dispatch(ticketActions.getStatsByDate({ startDate: yearAgo, endDate: now }));
         break;
       }
+      default: {
+        setPeriodStart(new Date());
+        break;
+      }
     }
     setCurrentEvent(null);
-  }, [timeFilter]);
+  }, [timeFilter, dispatch]);
   const handleEventChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const event = events.filter((event) => event.id === e.target.value);
     if (event.length > 0) {
@@ -55,6 +59,7 @@ const DashboardPage = () => {
     } else {
       dispatch(setCurrentEvent(null));
     }
+    setTimeFilter('');
   };
   return (
     <div className="main-content-container">
@@ -63,7 +68,6 @@ const DashboardPage = () => {
           <div className="flex justify-between items-center mb-2">
             <h4 className="font-bold text-default-orange text-2xl">Recent Event</h4>
           </div>
-          {/* <hr /> */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="text-center rounded shadow-md border p-4 flex flex-col justify-center">
               <p>Event Name</p>
@@ -91,6 +95,7 @@ const DashboardPage = () => {
             <h4 className="font-bold text-default-orange text-2xl flex-1">Ticket Stats</h4>
             <div className="flex gap-2 max-lg:flex-wrap max-lg:justify-end">
               <select value={timeFilter} onChange={(e) => setTimeFilter(e.target.value)} className="p-2 border hover:border-default-orange rounded">
+                <option value="">Select Period</option>
                 <option value="week">This Week</option>
                 <option value="month">This Month</option>
                 <option value="year">This Year</option>
@@ -105,7 +110,6 @@ const DashboardPage = () => {
               </select>
             </div>
           </div>
-          {/* <hr /> */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="text-center rounded shadow-md border p-4 flex flex-col justify-center">
               <p>Event</p>
