@@ -9,6 +9,7 @@ import ticketReducer from './slices/TicketSlice';
 import ticketTemplateReducer from './slices/TicketTemplateSlice';
 import buyerReducer from './slices/BuyerSlice';
 import userReducer from './slices/UserSlice';
+import ticketScanReducer from './slices/TicketScanSlice';
 import { rootSaga } from './sagas/rootSaga';
 
 // Create the saga middleware
@@ -26,6 +27,7 @@ export const store = configureStore({
     ticketTemplates: ticketTemplateReducer,
     buyers: buyerReducer,
     users: userReducer,
+    ticketScans: ticketScanReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });

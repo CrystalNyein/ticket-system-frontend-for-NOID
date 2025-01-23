@@ -1,7 +1,7 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { eventService } from '../../services/EventService';
-import { createEventSuccess, deleteEventSuccess, getEventsSuccess, updateEventSuccess } from '../slices/EventSlice';
-import { TCreateOrUpdateResponse, TEvent, TEventCreateUpdateParams, TGetResponse } from '../../constants/types';
+import { createEventSuccess, deleteEventSuccess, getEventsSuccess, setRecentEvent, updateEventSuccess } from '../slices/EventSlice';
+import { TCreateOrUpdateResponse, TEvent, TEventCreateUpdateParams, TGetResponse, TRecentEvent } from '../../constants/types';
 import { showSnackbar } from '../slices/SnackbarSlice';
 import { setLoading } from '../slices/CommonSlice';
 import { SnackbarType } from '../../constants/common';
@@ -9,6 +9,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { selectCurrentEvent } from '../selectors/EventSelector';
 import { eventActions } from '../actions/EventActions';
 import { AxiosResponse } from 'axios';
+import { setEventTicketStat } from '../slices/TicketSlice';
 
 // Worker Saga: Get Events
 function* getEventsSaga() {
@@ -51,13 +52,27 @@ function* updateEventSaga(action: PayloadAction<TEventCreateUpdateParams>) {
     yield put(setLoading(false));
   }
 }
-// Worker Safa: Delete Event
+// Worker Saga: Delete Event
 function* deleteEventSaga(action: PayloadAction<string>) {
   try {
     yield put(setLoading(true));
     yield call(eventService.deleteEvent, action.payload);
     yield put(deleteEventSuccess(action.payload));
     yield put(showSnackbar({ message: 'Event Deleted Successfully!', type: SnackbarType.SUCCESS }));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
+
+// Worker Saga: Get Recent Event Stats
+function* getRecentEventStatsSaga() {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<TRecentEvent> = yield call(eventService.getRecentEventStats);
+    yield put(setRecentEvent((response.data as TRecentEvent).event));
+    yield put(setEventTicketStat({ ticketCount: (response.data as TRecentEvent).ticketCount, soldTicketCount: (response.data as TRecentEvent).soldTicketCount }));
     yield put(setLoading(false));
   } catch (error) {
     yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
@@ -72,6 +87,7 @@ function* watchEvents() {
     takeLatest(eventActions.create.type, createEventSaga),
     takeLatest(eventActions.update.type, updateEventSaga),
     takeLatest(eventActions.delete.type, deleteEventSaga),
+    takeLatest(eventActions.getRecentStats.type, getRecentEventStatsSaga),
   ]);
 }
 export default watchEvents;

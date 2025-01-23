@@ -4,10 +4,12 @@ import { TEvent } from '../../constants/types';
 interface EventState {
   events: TEvent[];
   currentEvent: TEvent | null;
+  recentEvent: TEvent | null;
 }
 const initialState: EventState = {
   events: [],
   currentEvent: null,
+  recentEvent: null,
 };
 
 const eventSlice = createSlice({
@@ -32,8 +34,11 @@ const eventSlice = createSlice({
     deleteEventSuccess(state, action) {
       state.events = state.events.filter((event) => event.id !== action.payload);
     },
+    setRecentEvent(state, action: PayloadAction<TEvent | null>) {
+      state.recentEvent = action.payload;
+    },
   },
 });
 
-export const { setCurrentEvent, getEventsSuccess, createEventSuccess, updateEventSuccess, deleteEventSuccess } = eventSlice.actions;
+export const { setCurrentEvent, getEventsSuccess, createEventSuccess, updateEventSuccess, deleteEventSuccess, setRecentEvent } = eventSlice.actions;
 export default eventSlice.reducer;

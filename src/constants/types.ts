@@ -13,6 +13,9 @@ export type TEvent = {
 export type TEventCreateUpdateParams = Omit<TEvent, 'id' | 'createdAt' | 'updatedAt'> & {
   id?: string;
 };
+export type TRecentEvent = TTicketStat & {
+  event: TEvent;
+};
 
 export type TGetResponse<T> = {
   message: string;
@@ -84,6 +87,17 @@ export type TTicket = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+export type TTicketStat = {
+  ticketCount: number;
+  soldTicketCount: number;
+};
+export type TTicketStatByDateParams = {
+  startDate: Date;
+  endDate: Date;
+};
+export type TTicketStatByEventParams = {
+  eventId: string;
+};
 export type TTicketTemplate = {
   id: string;
   eventId: string;
@@ -140,7 +154,15 @@ export type TBuyer = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+export type TTicketScan = {
+  id: string;
+  ticketId: string;
+  scanDate: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 export type TTicketScanResponse = {
   ticket: TTicket;
   buyer: TBuyer;
+  ticketScan: TTicketScan;
 };

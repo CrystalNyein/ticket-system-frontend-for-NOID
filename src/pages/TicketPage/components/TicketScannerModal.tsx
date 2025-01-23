@@ -8,11 +8,11 @@ import { ticketActions } from '../../../redux/actions/TicketActions';
 
 interface TicketScannerModalProps {
   isOpen: boolean;
-  action:'scanTicket'|'findTicket';
+  action: 'scanTicket' | 'findTicket';
   onClose: () => void;
 }
 
-const TicketScannerModal: React.FC<TicketScannerModalProps> = ({ isOpen,action, onClose }) => {
+const TicketScannerModal: React.FC<TicketScannerModalProps> = ({ isOpen, action, onClose }) => {
   const scannerRef = useRef<HTMLDivElement>(null);
   const [scannedCode, setScannedCode] = useState<string | null>(null);
   const dispatch = useDispatch();
@@ -20,7 +20,8 @@ const TicketScannerModal: React.FC<TicketScannerModalProps> = ({ isOpen,action, 
     if (detectedCodes.length > 0) {
       const code = detectedCodes[0].rawValue;
       setScannedCode(code);
-      action=='scanTicket' && dispatch(ticketActions.scan(code));
+      if (action === 'scanTicket') dispatch(ticketActions.scan(code));
+      if (action === 'findTicket') dispatch(ticketActions.getDetails(code));
       onClose();
     } else {
       setScannedCode(null);

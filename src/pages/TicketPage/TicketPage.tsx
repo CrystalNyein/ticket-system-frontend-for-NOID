@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react";
-import {
-  TGetResponse,
-  TImportTicketSaleParams,
-  TTicket,
-  TTicketCreateParams,
-} from "../../constants/types";
-import { useDispatch, useSelector } from "react-redux";
-import { eventActions } from "../../redux/actions/EventActions";
-import { ticketActions } from "../../redux/actions/TicketActions";
-import CreateTicketModal from "./components/CreateTicketModal";
-import { setCurrentTemplate } from "../../redux/slices/TicketTemplateSlice";
-import TicketScannerModal from "./components/TicketScannerModal";
-import ImportTicketSaleModal from "./components/ImportTicketSalesModal";
-import { ticketService } from "../../services/TicketService";
-import { showSnackbar } from "../../redux/slices/SnackbarSlice";
-import { SnackbarType } from "../../constants/common";
-import { setLoading } from "../../redux/slices/CommonSlice";
-import ScanResultModal from "./components/ScanResultModal";
-import { selectCurrentBuyer } from "../../redux/selectors/BuyerSelector";
+import { useEffect, useState } from 'react';
+import { TGetResponse, TImportTicketSaleParams, TTicket, TTicketCreateParams } from '../../constants/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { eventActions } from '../../redux/actions/EventActions';
+import { ticketActions } from '../../redux/actions/TicketActions';
+import CreateTicketModal from './components/CreateTicketModal';
+import { setCurrentTemplate } from '../../redux/slices/TicketTemplateSlice';
+import TicketScannerModal from './components/TicketScannerModal';
+import ImportTicketSaleModal from './components/ImportTicketSalesModal';
+import { ticketService } from '../../services/TicketService';
+import { showSnackbar } from '../../redux/slices/SnackbarSlice';
+import { SnackbarType } from '../../constants/common';
+import { setLoading } from '../../redux/slices/CommonSlice';
+import ScanResultModal from './components/ScanResultModal';
+import { selectCurrentBuyer } from '../../redux/selectors/BuyerSelector';
+import { selectCurrentTicketScan } from '../../redux/selectors/TicketScanSelector';
 
 const TicketPage = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [importSaleModalOpen, setImportSaleModalOpen] = useState(false);
   const [scanModalOpen, setScanModalOpen] = useState(false);
-  const [currentAction,setCurrentAction]=useState<'scanTicket'|'findTicket'>();
+  const [currentAction, setCurrentAction] = useState<'scanTicket' | 'findTicket'>();
   const dispatch = useDispatch();
   const currentBuyer = useSelector(selectCurrentBuyer);
+  const currentTicketScan = useSelector(selectCurrentTicketScan);
   useEffect(() => {
     dispatch(eventActions.getList());
   }, [dispatch]);
@@ -54,17 +51,13 @@ const TicketPage = () => {
 
   const handleSaleSubmit = async (saleData: TImportTicketSaleParams) => {
     const { file, eventId } = saleData;
-    if (!file || !eventId)
-      return alert("Please provide an Excel file and event ID.");
+    if (!file || !eventId) return alert('Please provide an Excel file and event ID.');
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("eventId", eventId);
+    formData.append('file', file);
+    formData.append('eventId', eventId);
     try {
-      const response: TGetResponse<TTicket> =
-        await ticketService.importTicketSales(formData);
-      dispatch(
-        showSnackbar({ message: response.message, type: SnackbarType.SUCCESS })
-      );
+      const response: TGetResponse<TTicket> = await ticketService.importTicketSales(formData);
+      dispatch(showSnackbar({ message: response.message, type: SnackbarType.SUCCESS }));
       setImportSaleModalOpen(false);
       dispatch(setLoading(false));
     } catch (error) {
@@ -72,7 +65,7 @@ const TicketPage = () => {
         showSnackbar({
           message: (error as Error).message,
           type: SnackbarType.ERROR,
-        })
+        }),
       );
       dispatch(setLoading(false));
     }
@@ -82,29 +75,16 @@ const TicketPage = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold mb-4">Actions</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <button
-            onClick={handleGenerateTickets}
-            className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded"
-          >
+          <button onClick={handleGenerateTickets} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
             Generate Tickets
           </button>
-          <button
-            onClick={handleImportTicketSales}
-            className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded"
-          >
+          <button onClick={handleImportTicketSales} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
             Import Ticket Sales
           </button>
-          <button
-            onClick={handleScanTicket}
-            className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded"
-          >
+          <button onClick={handleScanTicket} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
             Scan Ticket
           </button>
-          
-          <button
-            onClick={handleFindTicket}
-            className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded"
-          >
+          <button onClick={handleFindTicket} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
             Get Ticket Details
           </button>
         </div>
@@ -138,9 +118,7 @@ const TicketPage = () => {
           }}
         />
       )}
-      {currentBuyer && (
-        <ScanResultModal openScanModal={() => setScanModalOpen(true)} />
-      )}
+      {currentBuyer && currentTicketScan && <ScanResultModal openScanModal={() => setScanModalOpen(true)} />}
       {/* {!events || events.length === 0 ? (
         <div className="text-center py-4 font-bold">No events available</div>
       ) : (

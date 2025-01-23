@@ -1,7 +1,17 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { ticketService } from '../../services/TicketService';
-import { createTicketSuccess, deleteTicketSuccess, getTicketsSuccess, setCurrentTicket, updateTicketSuccess } from '../slices/TicketSlice';
-import { TCreateOrUpdateResponse, TTicket, TTicketCreateParams, TTicketUpdateParams, TGetResponse, TTicketScanResponse } from '../../constants/types';
+import { createTicketSuccess, deleteTicketSuccess, getTicketsSuccess, setCurrentTicket, setTotalTicketStat, updateTicketSuccess } from '../slices/TicketSlice';
+import {
+  TCreateOrUpdateResponse,
+  TTicket,
+  TTicketCreateParams,
+  TTicketUpdateParams,
+  TGetResponse,
+  TTicketScanResponse,
+  TTicketStat,
+  TTicketStatByDateParams,
+  TTicketStatByEventParams,
+} from '../../constants/types';
 import { showSnackbar } from '../slices/SnackbarSlice';
 import { setLoading } from '../slices/CommonSlice';
 import { SnackbarType } from '../../constants/common';
@@ -10,6 +20,7 @@ import { selectCurrentTicket } from '../selectors/TicketSelector';
 import { ticketActions } from '../actions/TicketActions';
 import { AxiosResponse } from 'axios';
 import { setCurrentBuyer } from '../slices/BuyerSlice';
+import { setCurrentTicketScan } from '../slices/TicketScanSlice';
 
 // Worker Saga: Get Tickets
 function* getTicketsSaga() {
@@ -87,6 +98,46 @@ function* scanTicketSaga(action: PayloadAction<string>) {
     const response: TGetResponse<TTicketScanResponse> = yield call(ticketService.scanTicket, action.payload);
     yield put(setCurrentTicket((response.data as TTicketScanResponse).ticket));
     yield put(setCurrentBuyer((response.data as TTicketScanResponse).buyer));
+    yield put(setCurrentTicketScan((response.data as TTicketScanResponse).ticketScan));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
+// Worker Saga: get Ticket Details - Ticket, Buyer, Ticket Scan
+function* getTicketDetailsSaga(action: PayloadAction<string>) {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<TTicketScanResponse> = yield call(ticketService.getTicketDetails, action.payload);
+    yield put(setCurrentTicket((response.data as TTicketScanResponse).ticket));
+    yield put(setCurrentBuyer((response.data as TTicketScanResponse).buyer));
+    yield put(setCurrentTicketScan((response.data as TTicketScanResponse).ticketScan));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
+
+// Worker Saga: get Ticket stats by date
+function* getTicketStatsByDateSaga(action: PayloadAction<TTicketStatByDateParams>) {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<TTicketStat> = yield call(ticketService.getTicketStatsByDate, action.payload);
+    yield put(setTotalTicketStat(response.data as TTicketStat));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
+// Worker Saga: get Ticket stats by event
+function* getTicketStatsByEventSaga(action: PayloadAction<TTicketStatByEventParams>) {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<TTicketStat> = yield call(ticketService.getTicketStatsByEvent, action.payload);
+    yield put(setTotalTicketStat(response.data as TTicketStat));
     yield put(setLoading(false));
   } catch (error) {
     yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
@@ -103,6 +154,9 @@ function* watchTickets() {
     takeLatest(ticketActions.update.type, updateTicketSaga),
     takeLatest(ticketActions.delete.type, deleteTicketSaga),
     takeLatest(ticketActions.scan.type, scanTicketSaga),
+    takeLatest(ticketActions.getDetails.type, getTicketDetailsSaga),
+    takeLatest(ticketActions.getStatsByDate.type, getTicketStatsByDateSaga),
+    takeLatest(ticketActions.getStatsByEvent.type, getTicketStatsByEventSaga),
   ]);
 }
 export default watchTickets;

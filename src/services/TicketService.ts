@@ -1,5 +1,5 @@
 import { API } from '../constants/api';
-import { TTicketCreateParams, TTicketUpdateParams } from '../constants/types';
+import { TTicketCreateParams, TTicketStatByDateParams, TTicketStatByEventParams, TTicketUpdateParams } from '../constants/types';
 import api from './api';
 
 export const ticketService = {
@@ -33,6 +33,18 @@ export const ticketService = {
   },
   scanTicket: async (qrData: string) => {
     const response = await api.post(API.TICKETS.SCAN, { qrData });
+    return response.data;
+  },
+  getTicketDetails: async (qrData: string) => {
+    const response = await api.post(API.TICKETS.DETAILS, { qrData });
+    return response.data;
+  },
+  getTicketStatsByDate: async (ticketStatsData: TTicketStatByDateParams) => {
+    const response = await api.post(API.TICKETS.STATS_BY_DATE, ticketStatsData);
+    return response.data;
+  },
+  getTicketStatsByEvent: async (ticketStatsData: TTicketStatByEventParams) => {
+    const response = await api.post(API.TICKETS.STATS_BY_EVENT, ticketStatsData);
     return response.data;
   },
 };

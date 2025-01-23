@@ -6,4 +6,5 @@ export const eventActions = {
   getList: createAction('events/GET_LIST'),
   update: createAction<TEventCreateUpdateParams>('events/UPDATE'),
   delete: createAction<string>('events/DELETE'),
+  getRecentStats: createAction('events/GET_RECENT_STATS'),
 };

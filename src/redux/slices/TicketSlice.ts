@@ -1,13 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TTicket } from '../../constants/types';
+import { TTicket, TTicketStat } from '../../constants/types';
 
 interface TicketState {
   tickets: TTicket[];
   currentTicket: TTicket | null;
+  eventTicketStat: TTicketStat;
+  totalTicketStat: TTicketStat;
 }
 const initialState: TicketState = {
   tickets: [],
   currentTicket: null,
+  eventTicketStat: {
+    ticketCount: 0,
+    soldTicketCount: 0,
+  },
+  totalTicketStat: {
+    ticketCount: 0,
+    soldTicketCount: 0,
+  },
 };
 
 const ticketSlice = createSlice({
@@ -35,8 +45,14 @@ const ticketSlice = createSlice({
     deleteTicketSuccess(state, action) {
       state.tickets = state.tickets.filter((ticket) => ticket.id !== action.payload);
     },
+    setEventTicketStat(state, action) {
+      state.eventTicketStat = action.payload;
+    },
+    setTotalTicketStat(state, action) {
+      state.totalTicketStat = action.payload;
+    },
   },
 });
 
-export const { setCurrentTicket, getTicketsSuccess, createTicketSuccess, updateTicketSuccess, deleteTicketSuccess } = ticketSlice.actions;
+export const { setCurrentTicket, getTicketsSuccess, createTicketSuccess, updateTicketSuccess, deleteTicketSuccess, setEventTicketStat, setTotalTicketStat } = ticketSlice.actions;
 export default ticketSlice.reducer;
