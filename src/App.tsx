@@ -25,7 +25,7 @@ function App() {
           <Route path={routes.INDEX} element={<PrivateRoute element={<Layout />} guards={[authGuard]} />}>
             <Route path={routes.DASHBOARD} element={<PrivateRoute element={<DashboardPage />} guards={[authGuard]} allowedRoles={allowRoles.MANAGER} />} />
             <Route path={routes.EVENT} element={<PrivateRoute element={<EventPage />} guards={[authGuard]} allowedRoles={allowRoles.MANAGER} />} />
-            <Route path={routes.DEFAULT} element={<TicketPage />} />
+            <Route index element={<TicketPage />} />
             <Route path={routes.TICKET_TYPE} element={<TicketTypePage />} />
             <Route path={routes.USER} element={<PrivateRoute element={<UserPage />} guards={[authGuard]} allowedRoles={allowRoles.ADMIN} />} />
 

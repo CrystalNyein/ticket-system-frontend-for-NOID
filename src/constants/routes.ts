@@ -5,7 +5,7 @@ const routes = {
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   EVENT: '/event',
-  DEFAULT: '/ticket',
+  DEFAULT: '/',
   TICKET_TYPE: '/ticketType',
   USER: '/user',
   UNAUTHORIZED: '/unauthorized',
