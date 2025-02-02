@@ -32,8 +32,7 @@ const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({ element, gua
     }
     // Check role-based access
     if (allowedRoles && !allowedRoles.includes(authUser.role)) {
-      console.log(authUser.role);console.log(allowedRoles)
-      // return <Navigate to="/unauthorized" state={{ from: location }} />;
+      return <Navigate to="/unauthorized" state={{ from: location }} />;
     }
     // If all guards pass, render the element
     return element;

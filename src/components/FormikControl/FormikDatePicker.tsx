@@ -37,6 +37,7 @@ const FormikDatePicker: React.FC<TFormControlProps> = (props) => {
               selected={value || null} // Handle undefined or null values
               onChange={(val) => setFieldValue(name, val)} // Update Formik state
               dateFormat="yyyy-MM-dd" // Example: Customize the date format
+              autoComplete="off"
             />
           );
         }}

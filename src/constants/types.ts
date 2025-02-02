@@ -32,7 +32,7 @@ export type TableHeader<T> = {
 };
 
 export type TLoginForm = {
-  email: string;
+  identifier: string;
   password: string;
 };
 

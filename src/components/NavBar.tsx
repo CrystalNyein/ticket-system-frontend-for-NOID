@@ -17,8 +17,8 @@ const navigation = [
   },
   { name: 'Events', href: routes.EVENT, allowedRoles: allowRoles.MANAGER },
   { name: 'Tickets', href: routes.DEFAULT },
-  { name: 'Ticket Types', href: routes.TICKET_TYPE },
-  { name: 'Ticket Templates', href: routes.TICKET_TEMPLATE },
+  { name: 'Ticket Types', href: routes.TICKET_TYPE, allowedRoles: allowRoles.MANAGER },
+  { name: 'Ticket Templates', href: routes.TICKET_TEMPLATE, allowedRoles: allowRoles.MANAGER },
   { name: 'Users', href: routes.USER, allowedRoles: allowRoles.ADMIN },
 ];
 
@@ -110,7 +110,7 @@ const NavBar = () => {
             </div>
             <div className="-mr-2 flex md:hidden">
               {/* Mobile menu button */}
-              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-default-orange p-2 text-white hover:bg-opacity-80 hover:text-white focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-1">
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open main menu</span>
                 <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" />
@@ -122,20 +122,37 @@ const NavBar = () => {
 
         <DisclosurePanel className="md:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-            {navigation.map((item) => (
-              <DisclosureButton
-                key={item.name}
-                as="a"
-                href={item.href}
-                aria-current={item.href === currentRoute.pathname ? 'page' : undefined}
-                className={classNames(
-                  item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:bg-light-orange hover:text-white',
-                  'block rounded-md px-3 py-2 text-base font-medium',
-                )}
-              >
-                {item.name}
-              </DisclosureButton>
-            ))}
+            {navigation.map((item) => {
+              return item.allowedRoles ? (
+                user && item.allowedRoles?.includes(user.role!) && (
+                  <DisclosureButton
+                    key={item.name}
+                    as="a"
+                    href={item.href}
+                    aria-current={item.href === currentRoute.pathname ? 'page' : undefined}
+                    className={classNames(
+                      item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:bg-light-orange hover:text-white',
+                      'block rounded-md px-3 py-2 text-base font-medium',
+                    )}
+                  >
+                    {item.name}
+                  </DisclosureButton>
+                )
+              ) : (
+                <DisclosureButton
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  aria-current={item.href === currentRoute.pathname ? 'page' : undefined}
+                  className={classNames(
+                    item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:bg-light-orange hover:text-white',
+                    'block rounded-md px-3 py-2 text-base font-medium',
+                  )}
+                >
+                  {item.name}
+                </DisclosureButton>
+              );
+            })}
           </div>
           <div className="border-t border-gray-700 pb-3 pt-4">
             <div className="flex items-center px-5">

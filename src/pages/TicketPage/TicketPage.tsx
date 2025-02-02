@@ -15,6 +15,8 @@ import ScanResultModal from './components/ScanResultModal';
 import { selectCurrentBuyer } from '../../redux/selectors/BuyerSelector';
 import { selectCurrentTicketScan } from '../../redux/selectors/TicketScanSelector';
 import DoorSaleTicketsModal from './components/DoorSaleTicketsModal';
+import { selectAuthUser } from '../../redux/selectors/AuthSelector';
+import { storage } from '../../constants/storage';
 
 const TicketPage = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -23,6 +25,7 @@ const TicketPage = () => {
   const [doorSaleTicketsModalOpen, setDoorSaleTicketsModalOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState<'scanTicket' | 'findTicket'>();
   const dispatch = useDispatch();
+  const user = useSelector(selectAuthUser) || JSON.parse(storage.getUser()!);
   const currentBuyer = useSelector(selectCurrentBuyer);
   const currentTicketScan = useSelector(selectCurrentTicketScan);
   useEffect(() => {
@@ -84,12 +87,17 @@ const TicketPage = () => {
       <div className="mb-4">
         <h2 className="text-xl font-bold mb-4">Actions</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <button onClick={handleGenerateTickets} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
-            Generate Tickets
-          </button>
-          <button onClick={handleImportTicketSales} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
-            Import Ticket Sales
-          </button>
+          {user.role !== 'staff' && (
+            <>
+              {' '}
+              <button onClick={handleGenerateTickets} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
+                Generate Tickets
+              </button>
+              <button onClick={handleImportTicketSales} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
+                Import Ticket Sales
+              </button>
+            </>
+          )}
           <button onClick={handleScanTicket} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
             Scan Ticket
           </button>
