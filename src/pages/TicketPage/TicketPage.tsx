@@ -41,7 +41,7 @@ const TicketPage = () => {
   const ticketSummary = useSelector(selectTicketSummary);
   useEffect(() => {
     dispatch(eventActions.getList());
-    dispatch(ticketActions.getSummary());
+    if (user.role !== 'staff') dispatch(ticketActions.getSummary());
   }, [dispatch]);
   const handleGenerateTickets = () => {
     setCreateModalOpen(true);
@@ -142,23 +142,27 @@ const TicketPage = () => {
           )}
         </div>
       </div>
-      <hr className="my-4" />
-      <div>
-        <h3 className="font-bold text-xl">Ticket Summary</h3>
-        {!ticketSummary || ticketSummary.length === 0 ? (
-          <div className="text-center py-4 font-bold">No ticket summary available</div>
-        ) : (
-          <Table
-            data={ticketSummary}
-            header={TicketSummaryTableHeader}
-            tableRowAction={(summary: TTicketSummary) => (
-              <div className="flex space-x-2">
-                <TrashIcon className="h-6 w-6 cursor-pointer text-red-600" onClick={() => handleDeleteTickets(summary)} />
-              </div>
+      {user.role !== 'staff' && (
+        <>
+          <hr className="my-4" />
+          <div>
+            <h3 className="font-bold text-xl">Ticket Summary</h3>
+            {!ticketSummary || ticketSummary.length === 0 ? (
+              <div className="text-center py-4 font-bold">No ticket summary available</div>
+            ) : (
+              <Table
+                data={ticketSummary}
+                header={TicketSummaryTableHeader}
+                tableRowAction={(summary: TTicketSummary) => (
+                  <div className="flex space-x-2">
+                    <TrashIcon className="h-6 w-6 cursor-pointer text-red-600" onClick={() => handleDeleteTickets(summary)} />
+                  </div>
+                )}
+              />
             )}
-          />
-        )}
-      </div>
+          </div>
+        </>
+      )}
       {createModalOpen && (
         <CreateTicketModal
           isOpen={createModalOpen}
