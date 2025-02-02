@@ -26,9 +26,11 @@ const UploadTicketTemplateModal: React.FC<UploadTicketTemplateModalProps> = ({ i
   const events = useSelector(selectEvents);
   const ticketTypes = useSelector(selectTicketTypes);
   const dispatch = useDispatch();
-  const eventOptions: TOption[] = events.map((event) => {
-    return optionUtils(event);
-  });
+  const eventOptions: TOption[] = events
+    .filter((event) => new Date(event.endDate!) > new Date())
+    .map((event) => {
+      return optionUtils(event);
+    });
   const ticketTypeOptions: TOption[] = ticketTypes.map((ticketType) => {
     return ticketTypeOptionUtils(ticketType);
   });

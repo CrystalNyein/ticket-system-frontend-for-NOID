@@ -115,7 +115,7 @@ const TicketPage = () => {
     <div className="main-content-container">
       <div className="mb-4">
         <h2 className="text-xl font-bold mb-4">Actions</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {user.role !== 'staff' && (
             <>
               <button onClick={handleGenerateTickets} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
@@ -137,7 +137,7 @@ const TicketPage = () => {
           </button>
           {user.role !== 'staff' && (
             <button onClick={handleDeleteSelection} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
-              Delete Tickets For an Event and TicketType
+              Delete Tickets For Event and / or TicketType
             </button>
           )}
         </div>
@@ -216,7 +216,9 @@ const TicketPage = () => {
         <ConfirmationModal
           isOpen={isConfirmationModalOpen}
           title="Delete Tickets"
-          message={`Are you sure you want to delete the tickets for the event "${currentSummary?.eventName}" with the code "${currentSummary?.ticketTypeCode}"?`}
+          message={`Are you sure you want to delete the tickets for the event "${currentSummary?.eventName}"${
+            currentSummary?.ticketTypeCode === 'ALL' ? '' : ` with the code "${currentSummary?.ticketTypeCode}"`
+          }?`}
           highSecurity={true}
           onConfirm={handleConfirmDelete}
           onCancel={() => setIsConfirmationModalOpen(false)}

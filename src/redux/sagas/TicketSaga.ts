@@ -67,6 +67,7 @@ function* bulkCreateTicketSaga(action: PayloadAction<TTicketCreateParams>) {
     const response: TCreateOrUpdateResponse<TTicket> = yield call(ticketService.bulkCreateTicket, action.payload);
     yield put(createTicketSuccess(response.data));
     yield put(showSnackbar({ message: response.message, type: SnackbarType.SUCCESS }));
+    yield put(ticketActions.getSummary());
     yield put(setLoading(false));
   } catch (error) {
     yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));

@@ -43,7 +43,7 @@ const DeleteTicketModal: React.FC<DeleteTicketModalProps> = ({ isOpen, onClose, 
   const handleFormikSubmit = async (values: TTicketDeleteParams) => {
     const summary: TTicketSummary = {
       ...values,
-      eventName: '',
+      eventName: events.filter((event) => event.id === values.eventId)[0].name,
       'Total Tickets': 0,
       'Sold Tickets': 0,
     };
@@ -53,7 +53,7 @@ const DeleteTicketModal: React.FC<DeleteTicketModalProps> = ({ isOpen, onClose, 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-96 p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Generate Tickets</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Delete Tickets</h2>
         <Formik initialValues={initialValues} onSubmit={handleFormikSubmit} validationSchema={deleteTicketsSchema} enableReinitialize>
           {(formik) => {
             // Add useEffect hook here to update Formik field value when currentTemplate changes
