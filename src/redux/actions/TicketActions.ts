@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TTicketCreateParams, TTicketStatByDateParams, TTicketStatByEventParams, TTicketUpdateParams } from '../../constants/types';
+import { TDoorSaleTicketsParams, TTicketCreateParams, TTicketStatByDateParams, TTicketStatByEventParams, TTicketUpdateParams } from '../../constants/types';
 
 export const ticketActions = {
   create: createAction<TTicketCreateParams>('tickets/CREATE'),
@@ -11,4 +11,5 @@ export const ticketActions = {
   update: createAction<TTicketUpdateParams>('tickets/UPDATE'),
   delete: createAction<string>('tickets/DELETE'),
   scan: createAction<string>('tickets/SCAN'),
+  doorSales: createAction<TDoorSaleTicketsParams>('tickets/DOOR_SALES'),
 };

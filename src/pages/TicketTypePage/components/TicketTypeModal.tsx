@@ -47,7 +47,7 @@ const TicketTypeModal: React.FC<TicketTypeModalProps> = ({ action, isOpen, onClo
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 capitalize text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                    className="px-4 py-2 capitalize text-sm font-medium text-white bg-default-orange rounded-md hover:bg-opacity-80"
                     disabled={!formik.isValid || formik.isSubmitting}
                   >
                     {action}

@@ -102,6 +102,7 @@ export type TTicketTemplate = {
   id: string;
   eventId: string;
   ticketTypeCode: string;
+  event?: TEvent;
   path: string;
   filename: string;
   createdAt?: Date;
@@ -111,14 +112,14 @@ export type TCheckTicketTemplate = {
   template?: TTicketTemplate;
   templateExists: boolean;
 };
-export type TCheckTemplateParams = {
+export type TCheckTicketTemplateParams = {
   eventId: string;
   ticketTypeCode: string;
 };
-export type TUploadTemplateParams = TCheckTemplateParams & {
+export type TUploadTicketTemplateParams = TCheckTicketTemplateParams & {
   file: File | null;
 };
-export type TTicketCreateParams = TCheckTemplateParams & {
+export type TTicketCreateParams = TCheckTicketTemplateParams & {
   ticketTemplate: string;
   file?: File | null;
   totalCount?: number;
@@ -130,6 +131,13 @@ export type TTicketUpdateParams = {
 export type TImportTicketSaleParams = {
   eventId: string;
   file: File | null;
+};
+export type TDoorSaleTicketsParams = {
+  eventId: string;
+  ticketCode: string;
+  buyerName: string;
+  buyerPhone: string;
+  buyerEmail: string;
 };
 export type TTicketScanParams = {
   qrData: string;

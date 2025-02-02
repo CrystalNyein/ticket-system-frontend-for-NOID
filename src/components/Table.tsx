@@ -1,5 +1,5 @@
 import { userRoleOption } from '../constants/common';
-import { TableHeader } from '../constants/types';
+import { TableHeader, TEvent } from '../constants/types';
 import { ReactNode } from 'react';
 
 interface TableProps<T> {
@@ -34,7 +34,11 @@ const Table = <T,>({ data, header, tableRowAction }: TableProps<T>) => {
                 </td>
                 {header.map((column) => (
                   <td key={String(column.id)} className="px-6 py-4 text-sm text-gray-700">
-                    {column.id === 'role' ? userRoleOption.filter((role) => role.value === item[column.id])[0].label : String(item[column.id])}
+                    {column.id === 'role'
+                      ? userRoleOption.filter((role) => role.value === item[column.id])[0].label
+                      : column.id === 'event'
+                      ? (item[column.id] as TEvent).name
+                      : String(item[column.id])}
                   </td>
                 ))}
                 {tableRowAction && <td className="px-6 py-4">{tableRowAction(item)}</td>}

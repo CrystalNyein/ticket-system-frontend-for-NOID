@@ -12,8 +12,10 @@ export const API = {
     DETAILS: '/tickets/scan-details',
     STATS_BY_DATE: '/tickets/stats-by-date',
     STATS_BY_EVENT: '/tickets/stats-by-event',
+    DOOR_SALES: '/tickets/door-sales',
   },
   TICKET_TEMPLATES: {
+    NORM: (param?: string) => `/ticketTemplates${param ? `/${param}` : ''}`,
     CHECK: '/ticketTemplates/check-template',
     UPLOAD: '/ticketTemplates/upload-template',
   },

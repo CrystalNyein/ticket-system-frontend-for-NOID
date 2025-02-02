@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { TGetResponse, TImportTicketSaleParams, TTicket, TTicketCreateParams } from '../../constants/types';
+import { TDoorSaleTicketsParams, TGetResponse, TImportTicketSaleParams, TTicket, TTicketCreateParams } from '../../constants/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { eventActions } from '../../redux/actions/EventActions';
 import { ticketActions } from '../../redux/actions/TicketActions';
 import CreateTicketModal from './components/CreateTicketModal';
-import { setCurrentTemplate } from '../../redux/slices/TicketTemplateSlice';
+import { setCurrentTicketTemplate } from '../../redux/slices/TicketTemplateSlice';
 import TicketScannerModal from './components/TicketScannerModal';
 import ImportTicketSaleModal from './components/ImportTicketSalesModal';
 import { ticketService } from '../../services/TicketService';
@@ -14,11 +14,13 @@ import { setLoading } from '../../redux/slices/CommonSlice';
 import ScanResultModal from './components/ScanResultModal';
 import { selectCurrentBuyer } from '../../redux/selectors/BuyerSelector';
 import { selectCurrentTicketScan } from '../../redux/selectors/TicketScanSelector';
+import DoorSaleTicketsModal from './components/DoorSaleTicketsModal';
 
 const TicketPage = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [importSaleModalOpen, setImportSaleModalOpen] = useState(false);
   const [scanModalOpen, setScanModalOpen] = useState(false);
+  const [doorSaleTicketsModalOpen, setDoorSaleTicketsModalOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState<'scanTicket' | 'findTicket'>();
   const dispatch = useDispatch();
   const currentBuyer = useSelector(selectCurrentBuyer);
@@ -40,13 +42,16 @@ const TicketPage = () => {
     setCurrentAction('findTicket');
     setScanModalOpen(true);
   };
+  const handleDoorSale = () => {
+    setDoorSaleTicketsModalOpen(true);
+  };
 
   const handleCreateSubmit = (ticketData: TTicketCreateParams) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { file, ...rest } = ticketData;
     dispatch(ticketActions.bulkCreate(rest));
     setCreateModalOpen(false);
-    dispatch(setCurrentTemplate(null));
+    dispatch(setCurrentTicketTemplate(null));
   };
 
   const handleSaleSubmit = async (saleData: TImportTicketSaleParams) => {
@@ -70,6 +75,10 @@ const TicketPage = () => {
       dispatch(setLoading(false));
     }
   };
+  const handleDoorSaleSubmit = async (doorSalesData: TDoorSaleTicketsParams) => {
+    dispatch(ticketActions.doorSales(doorSalesData));
+    setDoorSaleTicketsModalOpen(false);
+  };
   return (
     <div className="main-content-container">
       <div className="mb-4">
@@ -87,6 +96,9 @@ const TicketPage = () => {
           <button onClick={handleFindTicket} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
             Get Ticket Details
           </button>
+          <button onClick={handleDoorSale} className="bg-default-orange hover:bg-opacity-90 cursor-pointer text-white px-3 py-1.5 rounded">
+            Add Door Sale Tickets
+          </button>
         </div>
       </div>
       {createModalOpen && (
@@ -94,7 +106,7 @@ const TicketPage = () => {
           isOpen={createModalOpen}
           onClose={() => {
             setCreateModalOpen(false);
-            dispatch(setCurrentTemplate(null));
+            dispatch(setCurrentTicketTemplate(null));
           }}
           onSubmit={handleCreateSubmit}
         />
@@ -118,32 +130,16 @@ const TicketPage = () => {
           }}
         />
       )}
-      {currentBuyer && currentTicketScan && <ScanResultModal openScanModal={() => setScanModalOpen(true)} />}
-      {/* {!events || events.length === 0 ? (
-        <div className="text-center py-4 font-bold">No events available</div>
-      ) : (
-        <Table
-          data={events}
-          header={EventTableHeader}
-          tableRowAction={(event: TEvent) => (
-            <div className="flex space-x-2">
-              <PencilIcon className="h-6 w-6 cursor-pointer" onClick={() => handleUpdateEvent(event)} />
-              <TrashIcon className="h-6 w-6 cursor-pointer text-red-600" onClick={() => handleDeleteEvent(event)} /> 
-            </div>
-          )}
+      {currentBuyer && currentTicketScan && currentAction && <ScanResultModal action={currentAction} openScanModal={() => setScanModalOpen(true)} />}
+      {doorSaleTicketsModalOpen && (
+        <DoorSaleTicketsModal
+          isOpen={doorSaleTicketsModalOpen}
+          onClose={() => {
+            setDoorSaleTicketsModalOpen(false);
+          }}
+          onSubmit={handleDoorSaleSubmit}
         />
-      )} */}
-
-      {/* {isModalOpen && <EventModal action={action} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleSubmit} />}
-      {isConfirmationModalOpen && (
-        <ConfirmationModal
-          isOpen={isConfirmationModalOpen}
-          title="Delete Event"
-          message={`Are you sure you want to delete the event "${currentEvent?.name}"`}
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setIsConfirmationModalOpen(false)}
-        />
-      )} */}
+      )}
     </div>
   );
 };

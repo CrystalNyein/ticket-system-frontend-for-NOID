@@ -1,3 +1,4 @@
 import { RootState } from '../store';
 
-export const selectCurrentTemplate = (state: RootState) => state.ticketTemplates.currentTemplate;
+export const selectTicketTemplates = (state: RootState) => state.ticketTemplates.ticketTemplates;
+export const selectCurrentTicketTemplate = (state: RootState) => state.ticketTemplates.currentTicketTemplate;

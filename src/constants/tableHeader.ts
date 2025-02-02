@@ -1,4 +1,4 @@
-import { TableHeader, TEventCreateUpdateParams, TTicketTypeCreateUpdateParams, TUserCreateUpdateParams } from './types';
+import { TableHeader, TEventCreateUpdateParams, TTicketTemplate, TTicketTypeCreateUpdateParams, TUserCreateUpdateParams } from './types';
 
 export const EventTableHeader: TableHeader<TEventCreateUpdateParams>[] = [
   { id: 'name', label: 'Name' },
@@ -15,4 +15,10 @@ export const UserTableHeader: TableHeader<TUserCreateUpdateParams>[] = [
   { id: 'email', label: 'Email' },
   { id: 'name', label: 'Name' },
   { id: 'role', label: 'Role' },
+];
+export const TicketTemplateTableHeader: TableHeader<TTicketTemplate>[] = [
+  { id: 'event', label: 'Event' },
+  { id: 'ticketTypeCode', label: 'Ticket Code' },
+  { id: 'filename', label: 'Template Name' },
+  { id: 'path', label: 'Template Path' },
 ];

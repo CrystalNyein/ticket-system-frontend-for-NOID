@@ -1,5 +1,5 @@
 import { API } from '../constants/api';
-import { TTicketCreateParams, TTicketStatByDateParams, TTicketStatByEventParams, TTicketUpdateParams } from '../constants/types';
+import { TDoorSaleTicketsParams, TTicketCreateParams, TTicketStatByDateParams, TTicketStatByEventParams, TTicketUpdateParams } from '../constants/types';
 import api from './api';
 
 export const ticketService = {
@@ -45,6 +45,10 @@ export const ticketService = {
   },
   getTicketStatsByEvent: async (ticketStatsData: TTicketStatByEventParams) => {
     const response = await api.post(API.TICKETS.STATS_BY_EVENT, ticketStatsData);
+    return response.data;
+  },
+  updateDoorSaleTickets: async (doorSaleData: TDoorSaleTicketsParams) => {
+    const response = await api.post(API.TICKETS.DOOR_SALES, doorSaleData);
     return response.data;
   },
 };

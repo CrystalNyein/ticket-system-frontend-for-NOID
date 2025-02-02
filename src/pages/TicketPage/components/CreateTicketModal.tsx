@@ -10,11 +10,11 @@ import { selectTicketTypes } from '../../../redux/selectors/TicketTypeSelector';
 import { useEffect, useRef, useState } from 'react';
 import { eventActions } from '../../../redux/actions/EventActions';
 import { ticketTypeActions } from '../../../redux/actions/TicketTypeActions';
-import { selectCurrentTemplate } from '../../../redux/selectors/TicketTemplateSelector';
+import { selectCurrentTicketTemplate } from '../../../redux/selectors/TicketTemplateSelector';
 import { ticketTemplateActions } from '../../../redux/actions/TicketTemplateActions';
 import { showSnackbar } from '../../../redux/slices/SnackbarSlice';
 import { SnackbarType } from '../../../constants/common';
-import { setCurrentTemplate } from '../../../redux/slices/TicketTemplateSlice';
+import { setCurrentTicketTemplate } from '../../../redux/slices/TicketTemplateSlice';
 import { ticketTemplateService } from '../../../services/TicketTemplateService';
 import FormikFile from '../../../components/FormikControl/FormikFile';
 
@@ -27,13 +27,15 @@ interface CreateTicketModalProps {
 const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const events = useSelector(selectEvents);
   const ticketTypes = useSelector(selectTicketTypes);
-  const currentTemplate = useSelector(selectCurrentTemplate);
+  const currentTemplate = useSelector(selectCurrentTicketTemplate);
   const [isChecking, setIsChecking] = useState(false);
   const dispatch = useDispatch();
   const formikRef = useRef<FormikProps<TTicketCreateParams>>(null);
-  const eventOptions: TOption[] = events.map((event) => {
-    return optionUtils(event);
-  });
+  const eventOptions: TOption[] = events
+    .filter((event) => new Date(event.endDate!) > new Date())
+    .map((event) => {
+      return optionUtils(event);
+    });
   const ticketTypeOptions: TOption[] = ticketTypes.map((ticketType) => {
     return ticketTypeOptionUtils(ticketType);
   });
@@ -73,8 +75,8 @@ const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, 
       uploadTemplateData.append('ticketTypeCode', values.ticketTypeCode); // Add ticketTypeCode
       uploadTemplateData.append('file', values.file);
       try {
-        const uploadResponse = await ticketTemplateService.uploadTemplate(uploadTemplateData);
-        dispatch(setCurrentTemplate(uploadResponse.data));
+        const uploadResponse = await ticketTemplateService.uploadTicketTemplate(uploadTemplateData);
+        dispatch(setCurrentTicketTemplate(uploadResponse.data));
         values.ticketTemplate = uploadResponse.data.id;
         // Step 2: Generate tickets
         onSubmit(values);
@@ -141,7 +143,7 @@ const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, 
                   <button
                     type="submit"
                     disabled={isChecking}
-                    className="px-4 py-2 text-sm capitalize font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-500"
+                    className="px-4 py-2 text-sm capitalize font-medium text-white bg-default-orange rounded-md hover:bg-opacity-80 disabled:cursor-not-allowed disabled:bg-gray-500"
                   >
                     Generate Tickets
                   </button>

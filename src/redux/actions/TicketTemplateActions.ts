@@ -1,6 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TCheckTemplateParams } from '../../constants/types';
+import { TCheckTicketTemplateParams } from '../../constants/types';
 
 export const ticketTemplateActions = {
-  checkTemplate: createAction<TCheckTemplateParams>('ticketTemplates/CHECK_TEMPLATE'),
+  checkTemplate: createAction<TCheckTicketTemplateParams>('ticketTemplates/CHECK_TEMPLATE'),
+  getList: createAction('ticketTemplates/GET_LIST'),
+  delete: createAction<string>('ticketTemplates/DELETE'),
 };

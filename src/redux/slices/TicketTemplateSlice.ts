@@ -2,20 +2,28 @@ import { createSlice } from '@reduxjs/toolkit';
 import { TTicketTemplate } from '../../constants/types';
 
 interface TicketTemplateState {
-  currentTemplate: TTicketTemplate | null;
+  ticketTemplates: TTicketTemplate[];
+  currentTicketTemplate: TTicketTemplate | null;
 }
 const initialState: TicketTemplateState = {
-  currentTemplate: null,
+  ticketTemplates: [],
+  currentTicketTemplate: null,
 };
 const ticketTemplateSlice = createSlice({
   name: 'ticketTemplates',
   initialState,
   reducers: {
-    setCurrentTemplate(state, action) {
-      state.currentTemplate = action.payload;
+    getTicketTemplatesSuccess(state, action) {
+      state.ticketTemplates = action.payload;
+    },
+    deleteTicketTemplateSuccess(state, action) {
+      state.ticketTemplates = state.ticketTemplates.filter((ticketTemplate) => ticketTemplate.id !== action.payload);
+    },
+    setCurrentTicketTemplate(state, action) {
+      state.currentTicketTemplate = action.payload;
     },
   },
 });
 
-export const { setCurrentTemplate } = ticketTemplateSlice.actions;
+export const { getTicketTemplatesSuccess, deleteTicketTemplateSuccess, setCurrentTicketTemplate } = ticketTemplateSlice.actions;
 export default ticketTemplateSlice.reducer;

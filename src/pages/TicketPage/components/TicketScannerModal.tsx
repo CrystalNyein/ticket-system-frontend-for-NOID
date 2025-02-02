@@ -51,7 +51,7 @@ const TicketScannerModal: React.FC<TicketScannerModalProps> = ({ isOpen, action,
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
       <div ref={scannerRef} className="bg-white rounded-lg shadow-lg w-96 p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-800">Scan QR Code</h2>
+          <h2 className="text-xl font-bold text-gray-800">{action === 'scanTicket' ? 'Scan QR Code' : 'Get Ticket Details'}</h2>
           <XMarkIcon onClick={onClose} className="size-8 cursor-pointer hover:bg-light-blue hover:text-white rounded p-1"></XMarkIcon>
         </div>
         <div className="flex flex-col items-center justify-center bg-gray-100">

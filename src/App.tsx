@@ -15,6 +15,7 @@ import { Snackbar } from './components/Snackbar';
 import UserPage from './pages/UserPage/UserPage';
 import { allowRoles } from './constants/common';
 import UnauthorizedPage from './pages/UnauthorizedPage';
+import TicketTemplatePage from './pages/TicketTemplatePage/TicketTemplatePage';
 
 function App() {
   return (
@@ -27,8 +28,8 @@ function App() {
             <Route path={routes.EVENT} element={<PrivateRoute element={<EventPage />} guards={[authGuard]} allowedRoles={allowRoles.MANAGER} />} />
             <Route index element={<TicketPage />} />
             <Route path={routes.TICKET_TYPE} element={<TicketTypePage />} />
+            <Route path={routes.TICKET_TEMPLATE} element={<TicketTemplatePage />} />
             <Route path={routes.USER} element={<PrivateRoute element={<UserPage />} guards={[authGuard]} allowedRoles={allowRoles.ADMIN} />} />
-
             {/* Unauthorized Route */}
             <Route path={routes.UNAUTHORIZED} element={<UnauthorizedPage />} />
           </Route>

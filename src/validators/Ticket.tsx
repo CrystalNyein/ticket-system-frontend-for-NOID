@@ -26,3 +26,10 @@ export const importTicketSaleSchema = Yup.object({
   eventId: Yup.string().required(messages.error.fieldRequired),
   file: Yup.mixed<File>().required(),
 });
+export const doorSaleTicketsSchema = Yup.object({
+  eventId: Yup.string().required(messages.error.fieldRequired),
+  ticketCode: Yup.string().required(messages.error.fieldRequired),
+  buyerName: Yup.string().required(messages.error.fieldRequired),
+  buyerPhone: Yup.string().required(messages.error.fieldRequired),
+  buyerEmail: Yup.string(),
+});

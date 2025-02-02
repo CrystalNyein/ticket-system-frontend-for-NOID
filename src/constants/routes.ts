@@ -7,6 +7,7 @@ const routes = {
   EVENT: '/event',
   DEFAULT: '/',
   TICKET_TYPE: '/ticketType',
+  TICKET_TEMPLATE: '/ticketTemplate',
   USER: '/user',
   UNAUTHORIZED: '/unauthorized',
 };

@@ -11,6 +11,7 @@ import {
   TTicketStat,
   TTicketStatByDateParams,
   TTicketStatByEventParams,
+  TDoorSaleTicketsParams,
 } from '../../constants/types';
 import { showSnackbar } from '../slices/SnackbarSlice';
 import { setLoading } from '../slices/CommonSlice';
@@ -145,6 +146,19 @@ function* getTicketStatsByEventSaga(action: PayloadAction<TTicketStatByEventPara
   }
 }
 
+// Worker Saga: Update Door Sale Tickets
+function* updateDoorSaleTicketsSaga(action: PayloadAction<TDoorSaleTicketsParams>) {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<TTicket> = yield call(ticketService.updateDoorSaleTickets, action.payload);
+    yield put(showSnackbar({ message: response.message, type: SnackbarType.SUCCESS }));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
+
 // Watcher Saga
 function* watchTickets() {
   yield all([
@@ -157,6 +171,7 @@ function* watchTickets() {
     takeLatest(ticketActions.getDetails.type, getTicketDetailsSaga),
     takeLatest(ticketActions.getStatsByDate.type, getTicketStatsByDateSaga),
     takeLatest(ticketActions.getStatsByEvent.type, getTicketStatsByEventSaga),
+    takeLatest(ticketActions.doorSales.type, updateDoorSaleTicketsSaga),
   ]);
 }
 export default watchTickets;
