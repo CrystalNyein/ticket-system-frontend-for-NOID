@@ -41,9 +41,11 @@ const DeleteTicketModal: React.FC<DeleteTicketModalProps> = ({ isOpen, onClose, 
   };
 
   const handleFormikSubmit = async (values: TTicketDeleteParams) => {
+    const event = events.filter((event) => event.id === values.eventId)[0];
     const summary: TTicketSummary = {
       ...values,
-      eventName: events.filter((event) => event.id === values.eventId)[0].name,
+      eventName: event.name,
+      eventEndDate: event.endDate!,
       'Total Tickets': 0,
       'Sold Tickets': 0,
     };

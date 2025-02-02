@@ -181,6 +181,7 @@ export type TTicketScanResponse = {
 export type TTicketSummary = {
   eventId: string;
   eventName: string;
+  eventEndDate: Date;
   ticketTypeCode: string;
   'Total Tickets': number;
   'Sold Tickets': number;

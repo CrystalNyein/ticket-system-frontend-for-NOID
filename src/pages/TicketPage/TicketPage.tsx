@@ -153,11 +153,17 @@ const TicketPage = () => {
               <Table
                 data={ticketSummary}
                 header={TicketSummaryTableHeader}
-                tableRowAction={(summary: TTicketSummary) => (
-                  <div className="flex space-x-2">
-                    <TrashIcon className="h-6 w-6 cursor-pointer text-red-600" onClick={() => handleDeleteTickets(summary)} />
-                  </div>
-                )}
+                tableRowAction={(summary: TTicketSummary) => {
+                  return new Date(summary.eventEndDate!) <= new Date() ? (
+                    <div className="flex space-x-2">
+                      <TrashIcon className="h-6 w-6 text-gray-500 cursor-not-allowed" title="This event has ended and you will not be able to delete tickets for this event." />
+                    </div>
+                  ) : (
+                    <div className="flex space-x-2">
+                      <TrashIcon className="h-6 w-6 cursor-pointer text-red-600" onClick={() => handleDeleteTickets(summary)} />
+                    </div>
+                  );
+                }}
               />
             )}
           </div>
