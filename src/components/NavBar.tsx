@@ -131,7 +131,7 @@ const NavBar = () => {
                     href={item.href}
                     aria-current={item.href === currentRoute.pathname ? 'page' : undefined}
                     className={classNames(
-                      item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:bg-light-orange hover:text-white',
+                      item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:font-bold',
                       'block rounded-md px-3 py-2 text-base font-medium',
                     )}
                   >
@@ -145,7 +145,7 @@ const NavBar = () => {
                   href={item.href}
                   aria-current={item.href === currentRoute.pathname ? 'page' : undefined}
                   className={classNames(
-                    item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:bg-light-orange hover:text-white',
+                    item.href === currentRoute.pathname ? 'bg-default-orange text-white' : 'text-default-black hover:font-bold',
                     'block rounded-md px-3 py-2 text-base font-medium',
                   )}
                 >
@@ -169,10 +169,7 @@ const NavBar = () => {
               </div>
             </div>
             <div className="mt-3 space-y-1 px-2">
-              <DisclosureButton
-                onClick={handleLogout}
-                className="block w-full rounded-md px-3 py-2 text-left text-base font-medium text-default-black hover:bg-light-orange hover:text-white"
-              >
+              <DisclosureButton onClick={handleLogout} className="block w-full rounded-md px-3 py-2 text-left text-base font-medium text-default-black hover:font-bold">
                 Log Out
               </DisclosureButton>
             </div>
