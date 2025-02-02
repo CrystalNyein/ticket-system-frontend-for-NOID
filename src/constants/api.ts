@@ -13,6 +13,8 @@ export const API = {
     STATS_BY_DATE: '/tickets/stats-by-date',
     STATS_BY_EVENT: '/tickets/stats-by-event',
     DOOR_SALES: '/tickets/door-sales',
+    SUMMARY: '/tickets/summary',
+    DELETE_BY_PARAMS: (eventId: string, ticketTypeCode: string) => `/tickets/delete-by-params?eventId=${eventId}&ticketTypeCode=${ticketTypeCode}`,
   },
   TICKET_TEMPLATES: {
     NORM: (param?: string) => `/ticketTemplates${param ? `/${param}` : ''}`,

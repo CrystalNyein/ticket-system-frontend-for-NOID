@@ -98,6 +98,10 @@ export type TTicketStatByDateParams = {
 export type TTicketStatByEventParams = {
   eventId: string;
 };
+export type TTicketDeleteParams = {
+  eventId: string;
+  ticketTypeCode: string;
+};
 export type TTicketTemplate = {
   id: string;
   eventId: string;
@@ -173,4 +177,11 @@ export type TTicketScanResponse = {
   ticket: TTicket;
   buyer: TBuyer;
   ticketScan: TTicketScan;
+};
+export type TTicketSummary = {
+  eventId: string;
+  eventName: string;
+  ticketTypeCode: string;
+  'Total Tickets': number;
+  'Sold Tickets': number;
 };

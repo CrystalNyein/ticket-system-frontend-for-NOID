@@ -5,6 +5,7 @@ export const messages = {
     passwordTooShort: 'Password must be at least 8 characters',
     snackbar: 'useSnackbar must be used within a SnackbarProvider',
     invalidRole: 'Invalid role.',
+    noTicketSummary: 'No Ticket Summary is selected',
   },
   loginSuccess: (username: string) => `Login successful! Welcome to NOID, ${username}`,
   loginFail: (error: string) => `Login failed: ${error}`,

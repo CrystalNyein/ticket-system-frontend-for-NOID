@@ -10,6 +10,7 @@ interface FormikSelectProps extends ComponentProps<typeof Field> {
   required?: boolean;
   className?: string;
   fieldCustomClass?: string;
+  noSelectOption?: boolean;
   control?: string;
 }
 
@@ -21,6 +22,7 @@ const FormikSelect: React.FC<FormikSelectProps> = ({
   className,
   fieldCustomClass,
   control = 'select', // Default to 'select' for this component
+  noSelectOption = false,
   ...rest
 }) => {
   return (
@@ -36,7 +38,7 @@ const FormikSelect: React.FC<FormikSelectProps> = ({
         as={control}
         {...rest}
       >
-        <option value="">Select an option</option>
+        {!noSelectOption && <option value="">Select an option</option>}
         {options.map((option) => {
           return typeof option === 'string' ? (
             <option key={option} value={option}>

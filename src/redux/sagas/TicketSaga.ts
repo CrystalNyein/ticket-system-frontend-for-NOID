@@ -1,6 +1,14 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { ticketService } from '../../services/TicketService';
-import { createTicketSuccess, deleteTicketSuccess, getTicketsSuccess, setCurrentTicket, setTotalTicketStat, updateTicketSuccess } from '../slices/TicketSlice';
+import {
+  createTicketSuccess,
+  deleteTicketSuccess,
+  getTicketsSuccess,
+  getTicketSummarySuccess,
+  setCurrentTicket,
+  setTotalTicketStat,
+  updateTicketSuccess,
+} from '../slices/TicketSlice';
 import {
   TCreateOrUpdateResponse,
   TTicket,
@@ -12,6 +20,8 @@ import {
   TTicketStatByDateParams,
   TTicketStatByEventParams,
   TDoorSaleTicketsParams,
+  TTicketDeleteParams,
+  TTicketSummary,
 } from '../../constants/types';
 import { showSnackbar } from '../slices/SnackbarSlice';
 import { setLoading } from '../slices/CommonSlice';
@@ -146,6 +156,18 @@ function* getTicketStatsByEventSaga(action: PayloadAction<TTicketStatByEventPara
   }
 }
 
+// Worker Saga: get Ticket Summary
+function* getTicketSummarySaga() {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<TTicketSummary> = yield call(ticketService.getTicketSummary);
+    yield put(getTicketSummarySuccess(response.data as TTicketSummary[]));
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
 // Worker Saga: Update Door Sale Tickets
 function* updateDoorSaleTicketsSaga(action: PayloadAction<TDoorSaleTicketsParams>) {
   try {
@@ -159,6 +181,19 @@ function* updateDoorSaleTicketsSaga(action: PayloadAction<TDoorSaleTicketsParams
   }
 }
 
+// Worker Saga: Delete Ticket by Params
+function* deleteTicketByParamsSaga(action: PayloadAction<TTicketDeleteParams>) {
+  try {
+    yield put(setLoading(true));
+    const response: TGetResponse<number> = yield call(ticketService.deleteTicketsByParams, action.payload.eventId, action.payload.ticketTypeCode);
+    yield put(showSnackbar({ message: response.message, type: SnackbarType.SUCCESS }));
+    yield put(ticketActions.getSummary());
+    yield put(setLoading(false));
+  } catch (error) {
+    yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));
+    yield put(setLoading(false));
+  }
+}
 // Watcher Saga
 function* watchTickets() {
   yield all([
@@ -172,6 +207,8 @@ function* watchTickets() {
     takeLatest(ticketActions.getStatsByDate.type, getTicketStatsByDateSaga),
     takeLatest(ticketActions.getStatsByEvent.type, getTicketStatsByEventSaga),
     takeLatest(ticketActions.doorSales.type, updateDoorSaleTicketsSaga),
+    takeLatest(ticketActions.getSummary.type, getTicketSummarySaga),
+    takeLatest(ticketActions.deleteByParams.type, deleteTicketByParamsSaga),
   ]);
 }
 export default watchTickets;

@@ -15,7 +15,6 @@ export const bulkCreateTicketSchema = Yup.object({
     return ticketTemplate ? schema.notRequired() : schema.required();
   }),
 });
-
 export const updateTicketSchema = Yup.object({
   status: Yup.string().oneOf(['available', 'sold', 'revoked', 'expired'], 'Invalid status').required(messages.error.fieldRequired),
   buyerId: Yup.string().when('status', ([status], schema) => {
@@ -32,4 +31,8 @@ export const doorSaleTicketsSchema = Yup.object({
   buyerName: Yup.string().required(messages.error.fieldRequired),
   buyerPhone: Yup.string().required(messages.error.fieldRequired),
   buyerEmail: Yup.string(),
+});
+export const deleteTicketsSchema = Yup.object({
+  eventId: Yup.string().required(messages.error.fieldRequired),
+  ticketTypeCode: Yup.string().required(messages.error.fieldRequired),
 });

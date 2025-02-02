@@ -51,4 +51,12 @@ export const ticketService = {
     const response = await api.post(API.TICKETS.DOOR_SALES, doorSaleData);
     return response.data;
   },
+  getTicketSummary: async () => {
+    const response = await api.get(API.TICKETS.SUMMARY);
+    return response.data;
+  },
+  deleteTicketsByParams: async (eventId: string, ticketTypeCode: string) => {
+    const response = await api.delete(API.TICKETS.DELETE_BY_PARAMS(eventId, ticketTypeCode));
+    return response.data;
+  },
 };
