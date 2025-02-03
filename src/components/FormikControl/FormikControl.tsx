@@ -16,7 +16,7 @@ const FormikControl: React.FC<TFormControlProps> = (props) => {
         id={name}
         name={name}
         as={control}
-        autocomplete="off"
+        autoComplete="off"
         {...rest}
       />
       <ErrorMessage name={name} className="absolute text-sm text-red-600" component="div" />

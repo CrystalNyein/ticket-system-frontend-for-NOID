@@ -40,7 +40,7 @@ const UserModal: React.FC<UserModalProps> = ({ action, isOpen, onClose, onSubmit
             {/* User Name */}
             <FormikControl control="input" label="User Name" name="name" required />
             {/* Password */}
-            {action === 'create' && <FormikControl control="input" type="password" label="Password" name="password" required autocomplete="new-password" />}
+            {action === 'create' && <FormikControl control="input" type="password" label="Password" name="password" required autoComplete="new-password" />}
             {/* Select User Role */}
             <FormikSelect label="UserRole" name="role" options={userRoleOption} required />
             {/* Action Buttons */}
