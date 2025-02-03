@@ -3,7 +3,7 @@ import { TImportTicketSaleParams, TOption } from '../../../constants/types';
 import { importTicketSaleSchema } from '../../../validators/Ticket';
 import FormikSelect from '../../../components/FormikControl/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectEvents } from '../../../redux/selectors/EventSelector';
+import { selectEvents, selectFutureEvents } from '../../../redux/selectors/EventSelector';
 import { optionUtils } from '../../../utils/optionUtils';
 import { useEffect } from 'react';
 import { eventActions } from '../../../redux/actions/EventActions';
@@ -18,12 +18,11 @@ interface ImportTicketSaleModalProps {
 
 const ImportTicketSaleModal: React.FC<ImportTicketSaleModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const events = useSelector(selectEvents);
+  const futureEvents = useSelector(selectFutureEvents);
   const dispatch = useDispatch();
-  const eventOptions: TOption[] = events
-    .filter((event) => new Date(event.endDate!) > new Date())
-    .map((event) => {
-      return optionUtils(event);
-    });
+  const eventOptions: TOption[] = futureEvents.map((event) => {
+    return optionUtils(event);
+  });
 
   useEffect(() => {
     if (!events.length) dispatch(eventActions.getList());

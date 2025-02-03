@@ -9,6 +9,7 @@ import EventModal from './components/EventModal';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { setCurrentEvent } from '../../redux/slices/EventSlice';
 import ConfirmationModal from '../../components/Modal/ConfirmationModal';
+import { normalizeDate } from '../../utils/dateUtils';
 
 const EventPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +68,7 @@ const EventPage = () => {
           data={events}
           header={EventTableHeader}
           tableRowAction={(event: TEvent) => {
-            return new Date(event.startDate!) <= new Date() ? (
+            return new Date(event.startDate!) <= normalizeDate(new Date()) ? (
               <div className="flex space-x-2">
                 <PencilIcon className="h-6 w-6 text-gray-500 cursor-not-allowed" title="This event has started and you will not be able to edit this event anymore." />
                 <TrashIcon className="h-6 w-6 text-gray-500 cursor-not-allowed" title="This event has started and you will not be able to delete this event anymore." />

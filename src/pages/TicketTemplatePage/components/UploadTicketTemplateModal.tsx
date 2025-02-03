@@ -3,7 +3,7 @@ import { TUploadTicketTemplateParams, TOption } from '../../../constants/types';
 import { importTicketSaleSchema } from '../../../validators/Ticket';
 import FormikSelect from '../../../components/FormikControl/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectEvents } from '../../../redux/selectors/EventSelector';
+import { selectEvents, selectFutureEvents } from '../../../redux/selectors/EventSelector';
 import { optionUtils, ticketTypeOptionUtils } from '../../../utils/optionUtils';
 import { useEffect } from 'react';
 import { eventActions } from '../../../redux/actions/EventActions';
@@ -24,13 +24,12 @@ interface UploadTicketTemplateModalProps {
 
 const UploadTicketTemplateModal: React.FC<UploadTicketTemplateModalProps> = ({ isOpen, onClose }) => {
   const events = useSelector(selectEvents);
+  const futureEvents = useSelector(selectFutureEvents);
   const ticketTypes = useSelector(selectTicketTypes);
   const dispatch = useDispatch();
-  const eventOptions: TOption[] = events
-    .filter((event) => new Date(event.endDate!) > new Date())
-    .map((event) => {
-      return optionUtils(event);
-    });
+  const eventOptions: TOption[] = futureEvents.map((event) => {
+    return optionUtils(event);
+  });
   const ticketTypeOptions: TOption[] = ticketTypes.map((ticketType) => {
     return ticketTypeOptionUtils(ticketType);
   });

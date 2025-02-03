@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { TDoorSaleTicketsParams, TGetResponse, TImportTicketSaleParams, TTicket, TTicketCreateParams, TTicketSummary } from '../../constants/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { eventActions } from '../../redux/actions/EventActions';
 import { ticketActions } from '../../redux/actions/TicketActions';
 import CreateTicketModal from './components/CreateTicketModal';
 import { setCurrentTicketTemplate } from '../../redux/slices/TicketTemplateSlice';
@@ -24,6 +23,7 @@ import { selectTicketSummary } from '../../redux/selectors/TicketSelector';
 import ConfirmationModal from '../../components/Modal/ConfirmationModal';
 import { messages } from '../../constants/messages';
 import DeleteTicketModal from './components/DeleteTicketModal';
+import { normalizeDate } from '../../utils/dateUtils';
 
 const TicketPage = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -40,7 +40,6 @@ const TicketPage = () => {
   const currentTicketScan = useSelector(selectCurrentTicketScan);
   const ticketSummary = useSelector(selectTicketSummary);
   useEffect(() => {
-    dispatch(eventActions.getList());
     if (user.role !== 'staff') dispatch(ticketActions.getSummary());
   }, [dispatch]);
   const handleGenerateTickets = () => {
@@ -154,7 +153,7 @@ const TicketPage = () => {
                 data={ticketSummary}
                 header={TicketSummaryTableHeader}
                 tableRowAction={(summary: TTicketSummary) => {
-                  return new Date(summary.eventEndDate!) <= new Date() ? (
+                  return new Date(summary.eventEndDate!) <= normalizeDate(new Date()) ? (
                     <div className="flex space-x-2">
                       <TrashIcon className="h-6 w-6 text-gray-500 cursor-not-allowed" title="This event has ended and you will not be able to delete tickets for this event." />
                     </div>

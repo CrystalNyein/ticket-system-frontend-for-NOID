@@ -4,7 +4,7 @@ import { bulkCreateTicketSchema } from '../../../validators/Ticket';
 import FormikControl from '../../../components/FormikControl/FormikControl';
 import FormikSelect from '../../../components/FormikControl/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectEvents } from '../../../redux/selectors/EventSelector';
+import { selectEvents, selectFutureEvents } from '../../../redux/selectors/EventSelector';
 import { optionUtils, ticketTypeOptionUtils } from '../../../utils/optionUtils';
 import { selectTicketTypes } from '../../../redux/selectors/TicketTypeSelector';
 import { useEffect, useRef, useState } from 'react';
@@ -26,16 +26,15 @@ interface CreateTicketModalProps {
 
 const CreateTicketModal: React.FC<CreateTicketModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const events = useSelector(selectEvents);
+  const futureEvents = useSelector(selectFutureEvents);
   const ticketTypes = useSelector(selectTicketTypes);
   const currentTemplate = useSelector(selectCurrentTicketTemplate);
   const [isChecking, setIsChecking] = useState(false);
   const dispatch = useDispatch();
   const formikRef = useRef<FormikProps<TTicketCreateParams>>(null);
-  const eventOptions: TOption[] = events
-    .filter((event) => new Date(event.endDate!) > new Date())
-    .map((event) => {
-      return optionUtils(event);
-    });
+  const eventOptions: TOption[] = futureEvents.map((event) => {
+    return optionUtils(event);
+  });
   const ticketTypeOptions: TOption[] = ticketTypes.map((ticketType) => {
     return ticketTypeOptionUtils(ticketType);
   });
