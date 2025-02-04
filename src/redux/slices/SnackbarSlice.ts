@@ -21,7 +21,7 @@ const snackbarSlice = createSlice({
       state.message = action.payload.message;
       state.type = action.payload.type;
       state.open = true;
-      state.duration = action.payload.duration || 3000;
+      state.duration = action.payload.duration || 5000;
     },
     hideSnackbar: (state) => {
       state.open = false;

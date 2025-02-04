@@ -6,6 +6,7 @@ export const messages = {
     snackbar: 'useSnackbar must be used within a SnackbarProvider',
     invalidRole: 'Invalid role.',
     noTicketSummary: 'No Ticket Summary is selected',
+    ticketToGreater: 'Ticket To must be greater than Ticket From',
   },
   loginSuccess: (username: string) => `Login successful! Welcome to NOID, ${username}`,
   loginFail: (error: string) => `Login failed: ${error}`,

@@ -38,6 +38,10 @@ const Table = <T,>({ data, header, tableRowAction }: TableProps<T>) => {
                       ? userRoleOption.filter((role) => role.value === item[column.id])[0].label
                       : column.id === 'event'
                       ? (item[column.id] as TEvent).name
+                      : column.id === 'isRandom'
+                      ? (item[column.id] as boolean) === true
+                        ? 'True'
+                        : 'False'
                       : String(item[column.id])}
                   </td>
                 ))}

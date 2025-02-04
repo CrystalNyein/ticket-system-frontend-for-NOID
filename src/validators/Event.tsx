@@ -7,4 +7,5 @@ export const eventSchema = Yup.object({
   description: Yup.string(),
   startDate: Yup.date().nullable().required(messages.error.fieldRequired).min(normalizeDate(new Date()), 'Start date must be today or later'),
   endDate: Yup.date().nullable().required(messages.error.fieldRequired).min(Yup.ref('startDate'), 'End date must be after the start date'),
+  isRandom: Yup.boolean().required(messages.error.fieldRequired),
 });

@@ -175,6 +175,7 @@ function* updateDoorSaleTicketsSaga(action: PayloadAction<TDoorSaleTicketsParams
     yield put(setLoading(true));
     const response: TGetResponse<TTicket> = yield call(ticketService.updateDoorSaleTickets, action.payload);
     yield put(showSnackbar({ message: response.message, type: SnackbarType.SUCCESS }));
+    yield put(ticketActions.getSummary());
     yield put(setLoading(false));
   } catch (error) {
     yield put(showSnackbar({ message: (error as AxiosResponse).data.message, type: SnackbarType.ERROR }));

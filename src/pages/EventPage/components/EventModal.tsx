@@ -7,6 +7,7 @@ import { eventParamUtils } from '../../../utils/formParamUtils';
 import { selectCurrentEvent } from '../../../redux/selectors/EventSelector';
 import FormikControl from '../../../components/FormikControl/FormikControl';
 import FormikDatePicker from '../../../components/FormikControl/FormikDatePicker';
+import FormikRadio from '../../../components/FormikControl/FormikRadio';
 
 interface EventModalProps {
   action: 'create' | 'update';
@@ -24,6 +25,7 @@ const EventModal: React.FC<EventModalProps> = ({ action, isOpen, onClose, onSubm
         description: '',
         startDate: null,
         endDate: null,
+        isRandom: false,
       };
 
   if (!isOpen) return null;
@@ -40,6 +42,8 @@ const EventModal: React.FC<EventModalProps> = ({ action, isOpen, onClose, onSubm
                 <FormikControl control="input" label="Event Name" name="name" required />
                 {/* Event Name */}
                 <FormikControl control="input" label="Description" name="description" />
+                {/* Random Ticket Number */}
+                <FormikRadio label="Random Ticket Number" name="isRandom" required />
                 {/* Event Start Date */}
                 <FormikDatePicker
                   label="Start Date"

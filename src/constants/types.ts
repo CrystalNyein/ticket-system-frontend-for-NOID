@@ -7,6 +7,7 @@ export type TEvent = {
   description: string | null;
   startDate: Date | null;
   endDate: Date | null;
+  isRandom: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -138,7 +139,11 @@ export type TImportTicketSaleParams = {
 };
 export type TDoorSaleTicketsParams = {
   eventId: string;
-  ticketCode: string;
+  isRandom: boolean;
+  ticketCode?: string;
+  ticketTypeCode?: string;
+  ticketFrom?: number;
+  ticketTo?: number;
   buyerName: string;
   buyerPhone: string;
   buyerEmail: string;

@@ -5,6 +5,7 @@ export const EventTableHeader: TableHeader<TEventCreateUpdateParams>[] = [
   { id: 'description', label: 'Description' },
   { id: 'startDate', label: 'Start Date' },
   { id: 'endDate', label: 'End Date' },
+  { id: 'isRandom', label: 'Use Random Ticket Code' },
 ];
 export const TicketTypeTableHeader: TableHeader<TTicketTypeCreateUpdateParams>[] = [
   { id: 'name', label: 'Name' },

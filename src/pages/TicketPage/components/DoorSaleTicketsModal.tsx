@@ -4,11 +4,13 @@ import { doorSaleTicketsSchema } from '../../../validators/Ticket';
 import FormikSelect from '../../../components/FormikControl/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectEvents, selectFutureEvents } from '../../../redux/selectors/EventSelector';
-import { optionUtils } from '../../../utils/optionUtils';
+import { optionUtils, ticketTypeOptionUtils } from '../../../utils/optionUtils';
 import { useEffect } from 'react';
 import { eventActions } from '../../../redux/actions/EventActions';
 import { setLoading } from '../../../redux/slices/CommonSlice';
 import FormikControl from '../../../components/FormikControl/FormikControl';
+import { selectTicketTypes } from '../../../redux/selectors/TicketTypeSelector';
+import { ticketTypeActions } from '../../../redux/actions/TicketTypeActions';
 
 interface DoorSaleTicketsModalProps {
   isOpen: boolean;
@@ -19,18 +21,27 @@ interface DoorSaleTicketsModalProps {
 const DoorSaleTicketsModal: React.FC<DoorSaleTicketsModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const events = useSelector(selectEvents);
   const futureEvents = useSelector(selectFutureEvents);
+  const ticketTypes = useSelector(selectTicketTypes);
   const dispatch = useDispatch();
   const eventOptions: TOption[] = futureEvents.map((event) => {
     return optionUtils(event);
   });
+  const ticketTypeOptions: TOption[] = ticketTypes.map((ticketType) => {
+    return ticketTypeOptionUtils(ticketType);
+  });
   useEffect(() => {
     if (!events.length) dispatch(eventActions.getList());
+    if (!ticketTypes.length) dispatch(ticketTypeActions.getList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initialValues: TDoorSaleTicketsParams = {
     eventId: '',
+    isRandom: false,
     ticketCode: '',
+    ticketTypeCode: '',
+    ticketFrom: 1,
+    ticketTo: 1,
     buyerName: '',
     buyerPhone: '',
     buyerEmail: '',
@@ -38,6 +49,13 @@ const DoorSaleTicketsModal: React.FC<DoorSaleTicketsModalProps> = ({ isOpen, onC
 
   const handleFormikSubmit = async (values: TDoorSaleTicketsParams) => {
     dispatch(setLoading(true));
+    if (values.isRandom) {
+      delete values.ticketTypeCode;
+      delete values.ticketFrom;
+      delete values.ticketTo;
+    } else {
+      delete values.ticketCode;
+    }
     onSubmit(values);
   };
   if (!isOpen) return null;
@@ -51,9 +69,28 @@ const DoorSaleTicketsModal: React.FC<DoorSaleTicketsModalProps> = ({ isOpen, onC
             return (
               <Form>
                 {/* Select Event */}
-                <FormikSelect label="Event" name="eventId" options={eventOptions} required />
-                {/* Ticket Code */}
-                <FormikControl control="input" label="Ticket Code" name="ticketCode" required />
+                <FormikSelect
+                  label="Event"
+                  name="eventId"
+                  options={eventOptions}
+                  required
+                  onChange={async (e: React.ChangeEvent<HTMLSelectElement>) => {
+                    formik.handleChange(e);
+                    formik.setFieldValue('isRandom', futureEvents.filter((event) => event.id === e.target.value)[0].isRandom);
+                  }}
+                />
+                {formik.values.isRandom ? (
+                  <>
+                    {/* Ticket Code */}
+                    <FormikControl control="input" label="Ticket Code" name="ticketCode" required />
+                  </>
+                ) : (
+                  <>
+                    <FormikSelect label="Ticket Type" name="ticketTypeCode" options={ticketTypeOptions} required />
+                    <FormikControl control="input" type="number" label="Ticket From" name="ticketFrom" min={1} required />
+                    <FormikControl control="input" type="number" label="Ticket To" name="ticketTo" min={1} required />
+                  </>
+                )}
                 {/* Buyer Name */}
                 <FormikControl control="input" label="Buyer Name" name="buyerName" required />
                 {/* Buyer Phone */}

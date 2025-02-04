@@ -76,6 +76,7 @@ const TicketPage = () => {
     formData.append('eventId', eventId);
     try {
       const response: TGetResponse<TTicket> = await ticketService.importTicketSales(formData);
+      dispatch(ticketActions.getSummary());
       dispatch(showSnackbar({ message: response.message, type: SnackbarType.SUCCESS }));
       setImportSaleModalOpen(false);
       dispatch(setLoading(false));

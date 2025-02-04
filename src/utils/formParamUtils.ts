@@ -5,6 +5,7 @@ export const eventParamUtils = (event: TEvent): TEventCreateUpdateParams => {
     id: event.id,
     name: event.name,
     description: event.description || '',
+    isRandom: event.isRandom,
     startDate: event.startDate,
     endDate: event.endDate,
   };
